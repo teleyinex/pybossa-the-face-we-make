@@ -23,6 +23,7 @@ import re
 from optparse import OptionParser
 import pbclient
 
+import flickr
 
 def get_flickr_photos(size="big", tags='Spike McCue'):
     """
@@ -41,7 +42,7 @@ def get_flickr_photos(size="big", tags='Spike McCue'):
     url = "http://api.flickr.com/services/rest/"
     parameters = {
         'method': 'flickr.photos.search',
-        'api_key': '1f725d3f1de1ffede9656db9a11c0402',
+        'api_key': flickr.FLICKR_API_KEY,
         'user_id': '63147805@N03',
         'format':  'json',
         'tags': tags,
