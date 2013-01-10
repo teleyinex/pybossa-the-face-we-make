@@ -1,0 +1,74 @@
+<style>
+    #example button {
+        width: 72px;
+    }
+    #example2 button {
+        width: 72px;
+    }
+</style>
+
+<div class="row">
+    <div class="span12">
+        <div id="modal" class="modal hide fade">
+            <div class="modal-header">
+                <h3>The Face We Make tutorial</h3>
+            </div>
+            <div id="0" class="modal-body" style="display:none">
+                <p><strong>Hi!</strong> This is a <strong>research application</strong> that wants to understand how good are humans identifying feelings using emoticons.
+               </p> 
+            </div>
+            <div id="1" class="modal-body" style="display:none">
+                <p>The application is really simple. It loads a photo from <a href="http://flickr.com/photos/thefacewemake">The Face We Make's photostream</a> and asks you this question: <strong>What emoticon is he/she representing?</strong></p>
+                <img src="http://farm7.staticflickr.com/6109/6286728068_2f3c6912b8_q.jpg" class="pull-right img-circle"/>
+                <p>You will have to choose between 10 possible answers:</p>
+                <p id="example">
+                <button class="btn btn-large">:-P</button>
+                <button class="btn btn-large">:-*</button>
+                <button class="btn btn-large">:~(</button>
+                <button class="btn btn-large">:-(</button>
+                <button class="btn btn-large">;-)</button>
+                </p>
+                <p id="example2">
+                <button class="btn btn-large">:-O</button>
+                <button class="btn btn-large">:-|</button>
+                <button class="btn btn-large">:-@</button>
+                <button class="btn btn-large">:-D</button>
+                <button class="btn btn-large">:-)</button>
+                </p>
+                <p>Click in the emoticon that you think the person is representing and a new task will be loaded for you. That's all!</p>
+            </div>
+            <div class="modal-footer">
+                <a id="prevBtn" href="#" onclick="showStep('prev')" class="btn">Previous</a>
+                <a id="nextBtn" href="#" onclick="showStep('next')" class="btn btn-success">Next</a>
+                <a id="startContrib" href="../thefacewemake/newtask" class="btn btn-primary" style="display:none"><i class="icon-thumbs-up"></i> Start collaborating!</a>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var step = -1;
+    function showStep(action) {
+        $("#" + step).hide();
+        if (action == 'next') {
+            step = step + 1;
+        }
+        if (action == 'prev') {
+            step = step - 1;
+        }
+        if (step == 0) {
+            $("#prevBtn").hide();
+        }
+        else {
+            $("#prevBtn").show();
+        }
+
+        if (step == 1 ) {
+            $("#nextBtn").hide();
+            $("#startContrib").show();
+        }
+        $("#" + step).show();
+    }
+
+    showStep('next');
+    $("#modal").modal('show');
+</script>
