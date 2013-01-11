@@ -34,15 +34,10 @@ def get_flickr_photos(size="big", tags='Spike McCue'):
     """
     # Get the ID of the photos and load it in the output var
     print('Contacting Flickr for photos')
-    #url = "http://api.flickr.com/services/feeds/photos_public.gne"
-    #values = {
-    #    'nojsoncallback': 1,
-    #    'format': "json",
-    #    'ids': "63147805@N03"}
     url = "http://api.flickr.com/services/rest/"
     parameters = {
         'method': 'flickr.photos.search',
-        'api_key': flickr.FLICKR_API_KEY,
+        'api_key': flickr.API_KEY,
         'user_id': '63147805@N03',
         'format':  'json',
         'tags': tags,
@@ -65,12 +60,30 @@ def get_flickr_photos(size="big", tags='Spike McCue'):
     # For each photo ID create its direct URL according to its size:
     # big, medium, small (or thumbnail) + Flickr page hosting the photo
     photos = []
+    url = 'http://api.flickr.com/services/rest'
     for photo in output['photos']['photo']:
-        print photo
+        # Get photo info
+        parameters = {
+            'method': 'flickr.photos.getInfo',
+            'api_key': flickr.API_KEY,
+            'photo_id': photo['id'],
+            'secret': photo['secret'],
+            'format':  'json',
+            'nojsoncallback': 1
+        }
+        query = url + "?" + urllib.urlencode(parameters)
+        print query
+        urlobj = urllib2.urlopen(query)
+        data = urlobj.read()
+        #print data
+        urlobj.close()
+        photo_data = json.loads(data)
+
         imgUrl_m = "http://farm%s.staticflickr.com/%s/%s_%s_m.jpg" % (photo['farm'], photo['server'], photo['id'], photo['secret'])
         imgUrl_b = "http://farm%s.staticflickr.com/%s/%s_%s_b.jpg" % (photo['farm'], photo['server'], photo['id'], photo['secret'])
         photos.append({'url_m':  imgUrl_m,
-                       'url_b': imgUrl_b})
+                       'url_b': imgUrl_b,
+                       'photo_info': photo_data})
     return photos
 
 
@@ -168,7 +181,8 @@ if __name__ == "__main__":
                 # Data for the tasks
                 task_info = dict(question=app_config['question'],
                                  url_m=photo['url_m'],
-                                 url_b=photo['url_b'])
+                                 url_b=photo['url_b'],
+                                 photo_info=photo['photo_info'])
                 pbclient.create_task(app.id, task_info, n_answers=int(options.n_answers))
     else:
         if options.add_more_tasks:
@@ -176,12 +190,13 @@ if __name__ == "__main__":
             if options.tags:
                 photos = get_flickr_photos(tags=options.tags)
             else:
-                photos = get_flickr_photos()
+                photos = get_flickr_photos(tags=options.tags)
             for photo in photos:
                 task_info = dict(question=app_config['question'],
                                  n_answers=int(options.n_answers),
                                  url_m=photo['url_m'],
-                                 url_b=photo['url_b'])
+                                 url_b=photo['url_b'],
+                                 photo_info=photo['photo_info'])
                 pbclient.create_task(app.id, task_info)
 
     if options.update_template:
@@ -199,12 +214,19 @@ if __name__ == "__main__":
         offset = 0
         limit = 100
         tasks = pbclient.get_tasks(app.id, offset=offset, limit=limit)
+        photos = get_flickr_photos(tags=options.tags)
         while tasks:
             for task in tasks:
                 print "Updating task: %s" % task.id
-                if ('n_answers' in task.info.keys()):
-                    del(task.info['n_answers'])
-                task.n_answers = int(options.update_tasks)
+                #if ('n_answers' in task.info.keys()):
+                #    del(task.info['n_answers'])
+                #task.n_answers = int(options.update_tasks)
+                print task.info['url_m']
+                for photo in photos:
+                    print photo['url_m']
+                    if ((photo['url_m']) == task.info['url_m']):
+                        task.info['photo_info'] = photo['photo_info']
+                        break
                 pbclient.update_task(task)
                 n_tasks += 1
             offset = (offset + limit)

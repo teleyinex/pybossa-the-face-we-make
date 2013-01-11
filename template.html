@@ -76,6 +76,10 @@
           <div id="answer3" style="padding-top:3px; text-align:center;">
           <button class="btn btn-large" onclick="submitTask('dontknow')">I don't know</button>
           </div>
+          <div style="height:42px;">
+           <hr>
+           <p style="font-size:24px;">Your answer is: <span id="correct" style="display:none"><i class="icon-thumbs-up"></i> Correct!</span><span id="wrong" style="display:none"> <i class="icon-thumbs-down"></i>Wrong!</span></p>
+          </div>
           <div>
             <hr>
             <h5><strong>Your progress</strong></h5>
@@ -90,10 +94,12 @@
   <div class="span3" style="text-align:center">
     <img id="photo" class="img-circle" src="http://img339.imageshack.us/img339/9017/loadingo.png" style="max-width=100%">
     <p>
-    Copyright © <a href="http://thefacewemake.org">The Face We Make</a>
+    Copyright © <a href="http://www.flickr.com/photos/thefacewemake">The Face We Make</a>
     </p>
     <p>by <a href="http://dxtr.com">Dexter Miranda</a>
     </p>
+  </div>
+  <div class="span2">
   </div>
 </div>
 
@@ -112,6 +118,8 @@ var spinner = new Throbber({
 
 spinner.appendTo (document.getElementById('throbber'));
 
+var taskAnswer = "";
+
 // This function shows the spinner div and starts its animation¬
 function spinnerStart() {
     $("#throbber").show();
@@ -126,14 +134,22 @@ function spinnerStop() {
     console.log("Spinner stopped!");
 }
 // Function to load the TaskRun data into the HTML skeleton
-function loadData( data ) {
-    // Uncomment next line for debugging purposes
-    //console.log( data );
-    if ( !$.isEmptyObject(data.task) ) {
-        $("#question h1").text(data.question);
-        $("#task-id").text(data.task.id);
-        $("#photo-link").attr("href", data.task.info.link);
-        $("#photo").attr("src",data.task.info.url_m);
+function loadData( task ) {
+    taskAnswer = "Cleaned!";
+    if ( !$.isEmptyObject(task) ) {
+        if (task.state=='completed') {
+            $('#answer').hide();
+            $('#disqus_thread').hide();
+            $('#taskcompleted').show();
+        }
+        loadUserProgress();
+        setTimeout(function() { $("#wrong").fadeOut() }, 1000);
+        setTimeout(function() { $("#correct").fadeOut() }, 1000);
+        $("#question h1").text(task.info.question);
+        $("#task-id").text(task.id);
+        $("#photo-link").attr("href", task.info.link);
+        $("#photo").attr("src", task.info.url_b);
+        taskAnswer = task.info.photo_info['photo']['description']['_content'].toLowerCase();
     }
     else {
         $(".skeleton").hide();
@@ -148,24 +164,7 @@ function loadTask( task_id ) {
         url: '/api/task/'+task_id,
         dataType: 'json'
     });
-    t.done( function (task) {
-        if ( !$.isEmptyObject(task) ) {
-            if (task.state=='completed') {
-                $('#answer').hide();
-                $('#disqus_thread').hide();
-                $('#taskcompleted').show();
-            }
-            loadUserProgress();
-            $("#question h1").text(task.info.question);
-            $("#task-id").text(task.id);
-            $("#photo-link").attr("href", task.info.link);
-            $("#photo").attr("src", task.info.url_b);
-        }
-        else {
-            $(".skeleton").hide();
-            $("#finish").fadeIn();
-        }
-    });
+    t.done( loadData );
 }
 
 function loadUserProgress() {
@@ -183,18 +182,26 @@ function loadUserProgress() {
 function submitTask(answer) {
     // Get the task-id
     var taskid = $("#task-id").text();
+
+    if (answer != 'dontknow') {
+        if (taskAnswer.indexOf(answer) != -1) {
+            $("#correct").show();
+        }
+        else {
+            $("#wrong").show();
+        }
+    }
     // Save the task
     answer = {answer:answer, photo:$("#photo").attr("src")};
-    console.log(answer);
     pybossa.saveTask(taskid, answer).done( function( data ) {
         // Uncoment next line for debugging purposes
         //console.log("Answer saved!");
         // FadeIn & Out the success div feedback
-        $("#success").fadeIn();
-        setTimeout(function() { $("#success").fadeOut() }, 2000);
+        //$("#success").fadeIn();
+        //setTimeout(function() { $("#success").fadeOut() }, 2000);
         // Load a new task
-        //pybossa.newTask("flickrperson").done( function( data ){ loadData( data ) });
-        window.location.pathname = "/app/" + appname + "/newtask";
+        pybossa.newTask(appname).done( function( data ){ loadData( data.task ) });
+        //window.location.pathname = "/app/" + appname + "/newtask";
     });
 }
 
@@ -210,7 +217,9 @@ else {
     pybossa.newTask(appname).done( function( data ) { 
 
         if ( !$.isEmptyObject(data.task) ) {
-            window.location.pathname = "/app/" + appname + "/task/" + data.task.id;
+            //window.location.pathname = "/app/" + appname + "/task/" + data.task.id;
+            history.pushState({},"Title","/app/" + appname + "/task/" + data.task.id);
+            loadData(data.task);
         }
         else {
             $(".skeleton").hide();
