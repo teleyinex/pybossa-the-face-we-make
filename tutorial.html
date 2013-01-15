@@ -2,8 +2,18 @@
     #example button {
         width: 72px;
     }
+
     #example2 button {
         width: 72px;
+    }
+
+    table, td {
+        text-transform: capitalize;
+        font-size: 18px;
+        vertical-align: middle !important;
+    }
+    td> i {
+        font-size: 48px;
     }
 </style>
 
@@ -20,7 +30,7 @@
             <div id="1" class="modal-body" style="display:none">
                 <p>The application is really simple. It loads a photo from <a href="http://flickr.com/photos/thefacewemake">The Face We Make's photostream</a> and asks you this question: <strong>What emoticon is he/she representing?</strong></p>
                 <img src="http://farm7.staticflickr.com/6109/6286728068_2f3c6912b8_q.jpg" class="pull-right img-circle"/>
-                <p>You will have to choose between 10 possible answers:</p>
+                <p>You will have to choose between the following possible answers:</p>
                 <p id="example">
                 <button class="btn btn-large">:-P</button>
                 <button class="btn btn-large">:-*</button>
@@ -36,6 +46,40 @@
                 <button class="btn btn-large">:-)</button>
                 </p>
                 <p>Click in the emoticon that you think the person is representing and a new task will be loaded for you. That's all!</p>
+            </div>
+            <div id="2" class="modal-body" style="display:none">
+                <p>We will show you 10 photos, and if you do all of them in a row we will show you a summary about which ones you have answered correctly. Something like this:</p>
+                <table class="table table-condensed">
+                    <thead>
+                        <tr>
+                            <th>Emoticons</th>
+                            <th></th>
+                            <th>Correct Answer</th>
+                            <th>Your answer</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="success">
+                            <td><img class="img-polaroid" src="http://farm7.staticflickr.com/6109/6286728068_2f3c6912b8_q.jpg" style="height:50px"></td>
+                            <td><i class="icon-thumbs-up"></i></td>
+                            <td>Grin :-D</td>
+                            <td>Grin :-D</td>
+                        </tr>
+                        <tr class="error">
+                            <td><img class="img-polaroid" src="http://farm7.staticflickr.com/6109/6286728068_2f3c6912b8_q.jpg" style="height:50px"></td>
+                            <td><i class="icon-thumbs-down"></i></th>
+                            <td>Grin :-D</td>
+                            <td>Smile :-)</td>
+                        </tr>
+                        <tr class="info">
+                            <td><img class="img-polaroid" src="http://farm7.staticflickr.com/6109/6286728068_2f3c6912b8_q.jpg"  style="height:50px"></td>
+                            <td><i class="icon-question-sign"></i></td>
+                            <td>Grin :-D</td>
+                            <td>I don't know</td>
+                        </tr>
+                    </tbody>
+                    
+                </table>
             </div>
             <div class="modal-footer">
                 <a id="prevBtn" href="#" onclick="showStep('prev')" class="btn">Previous</a>
@@ -62,7 +106,7 @@
             $("#prevBtn").show();
         }
 
-        if (step == 1 ) {
+        if (step == 2 ) {
             $("#nextBtn").hide();
             $("#startContrib").show();
         }
