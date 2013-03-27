@@ -180,7 +180,7 @@ pybossa.presentTask(function(task, deferred) {
             var answer = $(evt.target).attr("value");
             // Add result to results summary and feedback to the user
             if (answer != 'dontknow') {
-                if (taskAnswer.indexOf(answer) != -1) {
+                if (taskAnswer.toUpperCase().indexOf(answer.toUpperCase()) != -1) {
                     $("#correct").show();
                     $("#results").append('<tr class="success">' + emoticon + '<td><i class="icon-thumbs-up"></i></td>' + correctAnswer + '<td>' + answer + '</td></tr>');
                 }
