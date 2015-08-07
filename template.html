@@ -9,6 +9,7 @@
     }
     .skeleton {
         margin-top: 5px;
+        text-align: center;
     }
     .btn-answer {
         width: 50px;
@@ -19,34 +20,52 @@
     .emoticons {
         text-align: center;
     }
+    .copyright {
+        font-size: 10px;
+    }
+    
+    .tutorial {
+        position: fixed;
+        top: 25%;
+        right: -25px;
+        transform: rotate(-90deg);
+        z-index: 99999;
+        }
+
+    @media (max-width:320px) {
+        .tutorial {
+            top: 35%;
+        }
+    }
+
 </style>
 <div class="row skeleton">
-  <div class="col-md-12">
-    <h1 class="hidden-xs">What emoticon is he/she making?</h1>
-      <a id="photo-link" href="http://flickr.com/photos/thefacewemake">
-          <img id="photo" class="img-circle img-responsive" src="http://img339.imageshack.us/img339/9017/loadingo.png" style="max-width=100%">
-          </a>
-      <p class="hidden-xs">
-      Copyright © <a href="http://www.flickr.com/photos/thefacewemake">The Face We Make</a>
-      </p>
-      <p class="hidden-xs">by <a href="http://dxtr.com">Dexter Miranda</a>
-      </p>
-  </div>
+    <div class="col-md-6 col-md-offset-3">
+        <h1 class="hidden-xs">What emoticon is he/she making?</h1>
+        <a id="photo-link" href="http://flickr.com/photos/thefacewemake">
+            <img id="photo" class="img-circle img-responsive" src="http://img339.imageshack.us/img339/9017/loadingo.png" style="max-width=100%">
+        </a>
+    </div>
+    <div class="hidden-xs col-sm-12 col-md-6 col-md-offset-3 copyright">
+        <p>
+        Photo Copyright © <a href="http://www.flickr.com/photos/thefacewemake">The Face We Make</a> by <a href="http://dxtr.com">Dexter Miranda</a>
+        </p>
+    </div>
 </div>
 
 <div class="row skeleton">
-      <!-- Answer buttons -->
-      <div class="col-xs-12 col-md-5 emoticons">
-          <button class="btn btn-danger btn-large btn-answer" value="Tongue :-P">:-P</button>
-          <button class="btn btn-danger btn-large btn-answer" value="Kiss :-*">:-*</button>
-          <button class="btn btn-danger btn-large btn-answer" value="Cry :~(">:~(</button>
-          <button class="btn btn-danger btn-large btn-answer" value="Sad :-(">:-(</button>
-          <button class="btn btn-danger btn-large btn-answer" value="Wink ;-)">;-)</button>
-          <button class="btn btn-danger btn-large btn-answer" value="Surprised :-O">:-O</button>
-          <button class="btn btn-danger btn-large btn-answer" value="Disappointed :-|">:-|</button>
-          <button class="btn btn-danger btn-large btn-answer" value="Angry :-@">:-@</button>
-          <button class="btn btn-danger btn-large btn-answer" value="Grin :-D">:-D</button>
-          <button class="btn btn-danger btn-large btn-answer" value="Smile :-)">:-)</button>
+    <!-- Answer buttons -->
+    <div class="col-xs-12 col-md-6 col-md-offset-3 emoticons">
+        <button class="btn btn-danger btn-large btn-answer" value="Tongue :-P">:-P</button>
+        <button class="btn btn-danger btn-large btn-answer" value="Kiss :-*">:-*</button>
+        <button class="btn btn-danger btn-large btn-answer" value="Cry :~(">:~(</button>
+        <button class="btn btn-danger btn-large btn-answer" value="Sad :-(">:-(</button>
+        <button class="btn btn-danger btn-large btn-answer" value="Wink ;-)">;-)</button>
+        <button class="btn btn-danger btn-large btn-answer" value="Surprised :-O">:-O</button>
+        <button class="btn btn-danger btn-large btn-answer" value="Disappointed :-|">:-|</button>
+        <button class="btn btn-danger btn-large btn-answer" value="Angry :-@">:-@</button>
+        <button class="btn btn-danger btn-large btn-answer" value="Grin :-D">:-D</button>
+        <button class="btn btn-danger btn-large btn-answer" value="Smile :-)">:-)</button>
     </div>
 </div>
 
@@ -57,12 +76,11 @@
     </div>
 </div>
 
-  <div class="hidden-xs col-md-2 pull-right">
-      <a class="btn btn-primary btn-large" href="/app/thefacewemake/tutorial"><i class="icon-question-sign"></i> Tutorial</a>
-  </div>
+<div class="col-md-2 pull-right ">
+    <a class="btn btn-primary btn-large tutorial" href="/app/thefacewemake2/tutorial"><i class="icon-question-sign"></i> Tutorial</a>
 </div>
 
-<div id="finish" class="row skeleton" style="display:none">
+<div id="finish" class="row" style="display:none">
     <div class="col-md-12">
         <h1>Congratulations! You have participated in all available photos!</h1>
         <h2>Check your results</h2>
@@ -87,9 +105,6 @@
             </thead>
         </table>
     </div>
-    <hr>
-    <a class="btn small" href="/"><i class="icon-home"></i> Go Home</a>
-    <a class="btn small" href="/app"><i class="icon-heart"></i> Help in other applications</a>
 </div>
 
 <script src="/static/js/pybossa/pybossa.js" type="text/javascript"></script>
@@ -120,7 +135,7 @@ pybossa.taskLoaded(function(task, deferred) {
             deferred.resolve(task);
         });
         img.attr('src', task.info.url_b).css('max-width', "100%");
-        img.addClass('img-responsive img-circle col-xs-6 col-xs-offset-3');
+        img.addClass('img-responsive img-circle col-xs-6 col-xs-offset-3 col-sm-4 col-sm-offset-4');
         task.info.image = img;
     }
     else {
