@@ -21,14 +21,16 @@
     <div class="span12">
         <div id="modal" class="modal hide fade">
             <div class="modal-header">
-                <h3>The Face We Make tutorial</h3>
+                <h3><span id="i18n_title">The Face We Make tutorial</span></h3>
             </div>
             <div id="0" class="modal-body" style="display:none">
-                <p><strong>Hi!</strong> This is a <strong>research application</strong> that wants to understand how good are humans identifying feelings using emoticons.
-               </p> 
+                <div id="i18n_step_0">
+                <p><strong>Hi!</strong> This is a <strong>research project</strong> that wants to understand how good are humans identifying feelings using emoticons.
+                </p> 
+                </div>
             </div>
             <div id="1" class="modal-body" style="display:none">
-                <p>The application is really simple. It loads a photo from <a href="http://flickr.com/photos/thefacewemake">The Face We Make's photostream</a> and asks you this question: <strong>What emoticon is he/she representing?</strong></p>
+                <p>The project is really simple. It loads a photo from <a href="http://flickr.com/photos/thefacewemake">The Face We Make's photostream</a> and asks you this question: <strong>What emoticon is he/she representing?</strong></p>
                 <img src="http://farm7.staticflickr.com/6109/6286728068_2f3c6912b8_q.jpg" class="pull-right img-circle"/>
                 <p>You will have to choose between the following possible answers:</p>
                 <p id="example">
@@ -45,7 +47,7 @@
                 <button class="btn btn-large">:-D</button>
                 <button class="btn btn-large">:-)</button>
                 </p>
-                <p>Click in the emoticon that you think the person is representing and a new task will be loaded for you. That's all!</p>
+                <p>Click in the emoticon that you think the person is representing and a new emoticon will be loaded for you. That's all!</p>
             </div>
             <div id="2" class="modal-body" style="display:none">
                 <p>We will show you 10 photos, and if you do all of them in a row we will show you a summary about which ones you have answered correctly. Something like this:</p>
@@ -82,8 +84,8 @@
                 </table>
             </div>
             <div class="modal-footer">
-                <a id="prevBtn" href="#" onclick="showStep('prev')" class="btn">Previous</a>
-                <a id="nextBtn" href="#" onclick="showStep('next')" class="btn btn-success">Next</a>
+                <a id="prevBtn" href="#" onclick="showStep('prev')" class="btn"><span id="i18n_prev">Previous</span></a>
+                <a id="nextBtn" href="#" onclick="showStep('next')" class="btn btn-success"><span id="i18n_next">Next</span></a>
                 <a id="startContrib" href="../thefacewemake2/newtask" class="btn btn-primary" style="display:none"><i class="icon-thumbs-up"></i> Start collaborating!</a>
             </div>
         </div>
@@ -91,6 +93,7 @@
 </div>
 <script>
     var step = -1;
+    window.userLocale = "en";
     function showStep(action) {
         $("#" + step).hide();
         if (action == 'next') {
@@ -114,5 +117,56 @@
     }
 
     showStep('next');
-    $("#modal").modal('show');
+
+// Translations
+var messages = {"en": {
+                        "i18n_title": "The Face We Make tutorial",
+                        "i18n_next": "Next",
+                        "i18n_prev": "Previous",
+                        "i18n_step_0": "<p><strong>Hi!</strong> This is a <strong>research project</strong> that wants to understand how good are humans identifying feelings using emoticons.</p>",
+                      },
+                "es": {
+                        "i18n_title": "Tutorial para The Face We Make",
+                        "i18n_next": "Siguiente",
+                        "i18n_prev": "Anterior",
+                        "i18n_step_0": "<p><strong>¡Hola!</strong> Este es un <strong>proyecto de investigación</strong> que pretende comprender cómo de buenos son los humanos identificando emociones utilizando emoticonos.</p>",
+                      },
+               };
+
+function getCookie(cname) {
+    var name = cname + "=";
+    var ca = document.cookie.split(';');
+    for(var i=0; i<ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') c = c.substring(1);
+        if (c.indexOf(name) == 0) return c.substring(name.length,c.length);
+    }
+    return "";
+} 
+
+// Update userLocale with server side information
+$(document).ready(function(){
+        if ($("#languageselector").length) {
+        window.userLocale = getCookie('language').toLowerCase();
+        console.log(window.userLocale);
+        }
+        else {
+        window.userLocale = document.getElementById('PYBOSSA_USER_LOCALE').textContent.trim();
+        console.log(window.userLocale);
+        }
+
+    function i18n_translate() {
+        var ids = Object.keys(messages[window.userLocale]);
+        console.log(window.userLocale);
+        console.log(ids);
+        for (i=0; i<ids.length; i++) {
+            console.log("Translating: " + ids[i]);
+            document.getElementById(ids[i]).innerHTML = messages[window.userLocale][ids[i]];
+        }
+        //document.getElementById("i18n_title").innerHTML = messages["es"]["i18n_title"];
+        $("#modal").modal('show');
+        }
+        i18n_translate();
+});
+
 </script>
