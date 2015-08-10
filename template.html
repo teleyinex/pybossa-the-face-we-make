@@ -137,9 +137,26 @@ var messages = {"en": {
                       },
                };
 
+function getCookie(cname) {
+    var name = cname + "=";
+    var ca = document.cookie.split(';');
+    for(var i=0; i<ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') c = c.substring(1);
+        if (c.indexOf(name) == 0) return c.substring(name.length,c.length);
+    }
+    return "";
+} 
+
 // Update userLocale with server side information
- $(document).ready(function(){
-     userLocale = document.getElementById('PYBOSSA_USER_LOCALE').textContent.trim();
+$(document).ready(function(){
+        if ($("#languageselector").length) {
+        userLocale = getCookie('language').toLowerCase();
+        console.log(userLocale);
+        }
+        else {
+        userLocale = document.getElementById('PYBOSSA_USER_LOCALE').textContent.trim();
+        }
 });
 
 function i18n_translate() {
