@@ -41,14 +41,14 @@
 </style>
 <div class="row skeleton">
     <div class="col-md-6 col-md-offset-3">
-        <h1 class="hidden-xs">What emoticon is he/she making?</h1>
+        <h1 class="hidden-xs"><span id="i18n_question">What emoticon is he/she making?</span></h1>
         <a id="photo-link" href="http://flickr.com/photos/thefacewemake">
             <img id="photo" class="img-circle img-responsive" src="http://img339.imageshack.us/img339/9017/loadingo.png" style="max-width=100%">
         </a>
     </div>
     <div class="hidden-xs col-sm-12 col-md-6 col-md-offset-3 copyright">
         <p>
-        Photo Copyright © <a href="http://www.flickr.com/photos/thefacewemake">The Face We Make</a> by <a href="http://dxtr.com">Dexter Miranda</a>
+        <span id="i18n_photo">Photo</span> Copyright © <a href="http://www.flickr.com/photos/thefacewemake">The Face We Make</a> <span id="i18n_by">by</span> <a href="http://dxtr.com">Dexter Miranda</a>
         </p>
     </div>
 </div>
@@ -71,8 +71,9 @@
 
 <div class="row skeleton">
     <div class="col-md-12" style="text-align:center;">
-        <h4>Your answer is</h4>
-        <p style="font-size:24px;"><span id="correct" style="display:none"><i class="fa fa-thumbs-up"></i> Correct!</span><span id="wrong" style="display:none"> <i class="fa fa-thumbs-down"></i>Wrong!</span></p>
+        <h4><span id="left">0</span> <span id="i18n_claim">more emoticons to go!</span></h4>
+        <h4><span id="i18n_your">Your answer is</span></h4>
+        <p style="font-size:24px;"><span id="correct" style="display:none"><i class="fa fa-thumbs-up"></i> <span id="i18n_correct">Correct!</span></span><span id="wrong" style="display:none"> <i class="fa fa-thumbs-down"></i><span id="i18n_wrong">Wrong!</span></span></p>
     </div>
 </div>
 
@@ -110,19 +111,50 @@
 <script src="/static/js/pybossa/pybossa.js" type="text/javascript"></script>
 <script src="/static/js/throbber/throbber.js" type="text/javascript"></script>
 <script>
-var appname = 'thefacewemake2';
+var appname = 'thefacewemake';
 var taskAnswer = "";
 var correctAnswer = "";
 var emoticon = "";
 
+// Translations
+var messages = {"en": {
+                        "i18n_question": "What emoticon is he/she making?",
+                        "i18n_photo": "Photo",
+                        "i18n_by": "by",
+                        "i18n_claim": "more emoticons to go!",
+                        "i18n_your": "Your answer is",
+                        "i18n_wrong": "Wrong!",
+                        "i18n_correct": "Correct!",
+                      },
+                "es": {
+                        "i18n_question": "¿Qué emoticono está representando?",
+                        "i18n_photo": "Foto",
+                        "i18n_by": "por",
+                        "i18n_claim": "emoticonos más para terminar",
+                        "i18n_your": "Tu respuesta es",
+                        "i18n_wrong": "¡Equivocada!",
+                        "i18n_correct": "¡Correcta!",
+                      },
+               };
+
+// Update userLocale with server side information
+ $(document).ready(function(){
+     userLocale = document.getElementById('PYBOSSA_USER_LOCALE').textContent.trim();
+});
+
+function i18n_translate() {
+    var ids = Object.keys(messages[userLocale])
+    for (i=0; i<ids.length; i++) {
+        console.log("Translating: " + ids[i]);
+        document.getElementById(ids[i]).innerHTML = messages[userLocale][ids[i]];
+    }
+}
+
 function loadUserProgress() {
     pybossa.userProgress(appname).done(function(data){
-        var pct = Math.round((data.done*100)/data.total);
-        $("#progress").css("width", pct.toString() +"%");
-        $("#progress").attr("title", pct.toString() + "% completed!");
-        $("#progress").tooltip({'placement': 'left'}); 
-        $("#total").text(data.total);
-        $("#done").text(data.done);
+        var left = data.total - data.done;
+        $("#left").text(left);
+        $("#left").addClass('animated pulse');
     });
 }
 
@@ -145,7 +177,8 @@ pybossa.taskLoaded(function(task, deferred) {
 
 pybossa.presentTask(function(task, deferred) {
     if ( !$.isEmptyObject(task) ) {
-        //loadUserProgress();
+        loadUserProgress();
+        i18n_translate();
         $('#photo-link').html('').append(task.info.image);
         $("#question>h1").html(task.info.question);
         $('#task-id').html(task.id);
