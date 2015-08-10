@@ -30,63 +30,66 @@
                 </div>
             </div>
             <div id="1" class="modal-body" style="display:none">
-                <p>The project is really simple. It loads a photo from <a href="http://flickr.com/photos/thefacewemake">The Face We Make's photostream</a> and asks you this question: <strong>What emoticon is he/she representing?</strong></p>
-                <img src="http://farm7.staticflickr.com/6109/6286728068_2f3c6912b8_q.jpg" class="pull-right img-circle"/>
-                <p>You will have to choose between the following possible answers:</p>
-                <p id="example">
-                <button class="btn btn-large">:-P</button>
-                <button class="btn btn-large">:-*</button>
-                <button class="btn btn-large">:~(</button>
-                <button class="btn btn-large">:-(</button>
-                <button class="btn btn-large">;-)</button>
-                </p>
-                <p id="example2">
-                <button class="btn btn-large">:-O</button>
-                <button class="btn btn-large">:-|</button>
-                <button class="btn btn-large">:-@</button>
-                <button class="btn btn-large">:-D</button>
-                <button class="btn btn-large">:-)</button>
-                </p>
-                <p>Click in the emoticon that you think the person is representing and a new emoticon will be loaded for you. That's all!</p>
+                <div id="i18n_step_1">
+                    <p>The project is really simple. It loads a photo from <a href="http://flickr.com/photos/thefacewemake">The Face We Make's photostream</a> and asks you this question: <strong>What emoticon is he/she representing?</strong></p>
+                    <img src="http://farm7.staticflickr.com/6109/6286728068_2f3c6912b8_q.jpg" class="pull-right img-circle"/>
+                    <p>You will have to choose between the following possible answers:</p>
+                    <p id="example">
+                    <button class="btn btn-large btn-danger">:-P</button>
+                    <button class="btn btn-large btn-danger">:-*</button>
+                    <button class="btn btn-large btn-danger">:~(</button>
+                    <button class="btn btn-large btn-danger">:-(</button>
+                    <button class="btn btn-large btn-danger">;-)</button>
+                    </p>
+                    <p id="example2">
+                    <button class="btn btn-large btn-danger">:-O</button>
+                    <button class="btn btn-large btn-danger">:-|</button>
+                    <button class="btn btn-large btn-danger">:-@</button>
+                    <button class="btn btn-large btn-danger">:-D</button>
+                    <button class="btn btn-large btn-danger">:-)</button>
+                    </p>
+                    <p>Click in the emoticon that you think the person is representing and a new emoticon will be loaded for you. That's all!</p>
+                </div>
             </div>
             <div id="2" class="modal-body" style="display:none">
-                <p>We will show you 10 photos, and if you do all of them in a row we will show you a summary about which ones you have answered correctly. Something like this:</p>
-                <table class="table table-condensed">
-                    <thead>
-                        <tr>
-                            <th>Emoticons</th>
-                            <th></th>
-                            <th>Correct Answer</th>
-                            <th>Your answer</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr class="success">
-                            <td><img class="img-polaroid" src="http://farm7.staticflickr.com/6109/6286728068_2f3c6912b8_q.jpg" style="height:50px"></td>
-                            <td><i class="icon-thumbs-up"></i></td>
-                            <td>Grin :-D</td>
-                            <td>Grin :-D</td>
-                        </tr>
-                        <tr class="error">
-                            <td><img class="img-polaroid" src="http://farm7.staticflickr.com/6109/6286728068_2f3c6912b8_q.jpg" style="height:50px"></td>
-                            <td><i class="icon-thumbs-down"></i></th>
-                            <td>Grin :-D</td>
-                            <td>Smile :-)</td>
-                        </tr>
-                        <tr class="info">
-                            <td><img class="img-polaroid" src="http://farm7.staticflickr.com/6109/6286728068_2f3c6912b8_q.jpg"  style="height:50px"></td>
-                            <td><i class="icon-question-sign"></i></td>
-                            <td>Grin :-D</td>
-                            <td>I don't know</td>
-                        </tr>
-                    </tbody>
-                    
-                </table>
+                <div id="i18n_step_2">
+                    <p>We will show you 10 photos, and if you do all of them in a row we will show you a summary about which ones you have answered correctly. Something like this:</p>
+                    <table class="table table-condensed">
+                        <thead>
+                            <tr>
+                                <th>Emoticons</th>
+                                <th></th>
+                                <th>Correct Answer</th>
+                                <th>Your answer</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="success">
+                                <td><img class="img-polaroid" src="http://farm7.staticflickr.com/6109/6286728068_2f3c6912b8_q.jpg" style="height:50px"></td>
+                                <td><i class="icon-thumbs-up"></i></td>
+                                <td>Grin :-D</td>
+                                <td>Grin :-D</td>
+                            </tr>
+                            <tr class="error">
+                                <td><img class="img-polaroid" src="http://farm7.staticflickr.com/6109/6286728068_2f3c6912b8_q.jpg" style="height:50px"></td>
+                                <td><i class="icon-thumbs-down"></i></th>
+                                <td>Grin :-D</td>
+                                <td>Smile :-)</td>
+                            </tr>
+                            <tr class="info">
+                                <td><img class="img-polaroid" src="http://farm7.staticflickr.com/6109/6286728068_2f3c6912b8_q.jpg"  style="height:50px"></td>
+                                <td><i class="icon-question-sign"></i></td>
+                                <td>Grin :-D</td>
+                                <td>I don't know</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    </div>
             </div>
             <div class="modal-footer">
                 <a id="prevBtn" href="#" onclick="showStep('prev')" class="btn"><span id="i18n_prev">Previous</span></a>
                 <a id="nextBtn" href="#" onclick="showStep('next')" class="btn btn-success"><span id="i18n_next">Next</span></a>
-                <a id="startContrib" href="../thefacewemake2/newtask" class="btn btn-primary" style="display:none"><i class="icon-thumbs-up"></i> Start collaborating!</a>
+                <a id="startContrib" href="../thefacewemake2/newtask" class="btn btn-primary" style="display:none"><i class="icon-thumbs-up"></i> <span id="i18n_start">Start collaborating!</span></a>
             </div>
         </div>
     </div>
@@ -123,13 +126,24 @@ var messages = {"en": {
                         "i18n_title": "The Face We Make tutorial",
                         "i18n_next": "Next",
                         "i18n_prev": "Previous",
+                        "i18n_start": "Start collaborating!",
                         "i18n_step_0": "<p><strong>Hi!</strong> This is a <strong>research project</strong> that wants to understand how good are humans identifying feelings using emoticons.</p>",
-                      },
+                        "i18n_step_1": "<p>The project is really simple. It loads a photo from <a href='http://flickr.com/photos/thefacewemake'>The Face We Make's photostream</a> and asks you this question: <strong>What emoticon is he/she representing?</strong></p><img src='http://farm7.staticflickr.com/6109/6286728068_2f3c6912b8_q.jpg' class='pull-right img-circle'/>                  <p>You will have to choose between the following possible answers:</p>                     <p id='example'>                     <button class='btn btn-large btn-danger'>:-P</button>                     <button class='btn btn-large btn-danger'>:-*</button>                     <button class='btn btn-large btn-danger'>:~(</button>                     <button class='btn btn-large btn-danger'>:-(</button>                     <button class='btn btn-large btn-danger'>;-)</button>                     </p>                     <p id='example2'>                     <button class='btn btn-large btn-danger'>:-O</button>                     <button class='btn btn-large btn-danger'>:-|</button>                     <button class='btn btn-large btn-danger'>:-@</button>                     <button class='btn btn-large btn-danger'>:-D</button>                     <button class='btn btn-large btn-danger'>:-)</button>                     </p>                     <p>Click in the emoticon that you think the person is representing and a new emoticon will be loaded for you. That's all!</p>",
+                        "i18n_step_2": "<p>We will show you 10 photos, and if you do all of them in a row we will show you a summary about which ones you have answered correctly. Something like this:</p> <table class='table table-condensed'> <thead> <tr>                                <th>Emoticons</th>                                 <th></th>                                 <th>Correct Answer</th>                                 <th>Your answer</th>                             </tr>                         </thead>                         <tbody>                             <tr class='success'>                                 <td><img class='img-polaroid' src='http://farm7.staticflickr.com/6109/6286728068_2f3c6912b8_q.jpg' style='height:50px'></td>                                 <td><i class='icon-thumbs-up'></i></td>                                <td>Grin :-D</td>                                 <td>Grin :-D</td>                            </tr>                             <tr class='error'>                                 <td><img class='img-polaroid' src='http://farm7.staticflickr.com/6109/6286728068_2f3c6912b8_q.jpg' style='height:50px'></td>      <td><i class='icon-thumbs-down'></i></th>                              <td>Grin :-D</td>                                 <td>Smile :-)</td>                             </tr>                             <tr class='info'>                                 <td><img class='img-polaroid' src='http://farm7.staticflickr.com/6109/6286728068_2f3c6912b8_q.jpg'  style='height:50px'></td>                                 <td><i class='icon-question-sign'></i></td>  <td>Grin :-D</td>      <td>I don't know</td>a                            </tr>                         </tbody>                     </table>",
+
+                },
+
                 "es": {
                         "i18n_title": "Tutorial para The Face We Make",
                         "i18n_next": "Siguiente",
                         "i18n_prev": "Anterior",
+                        "i18n_start": "¡Comenzar!",
                         "i18n_step_0": "<p><strong>¡Hola!</strong> Este es un <strong>proyecto de investigación</strong> que pretende comprender cómo de buenos son los humanos identificando emociones utilizando emoticonos.</p>",
+
+                        "i18n_step_1": "<p>El proyecto es muy sencillo. Carga una foto del album <a href='http://flickr.com/photos/thefacewemake'>The Face We Make</a> y te pide que respondas a la siguiente pregunta: <strong>¿Qué emoticon está representando?</strong></p><img src='http://farm7.staticflickr.com/6109/6286728068_2f3c6912b8_q.jpg' class='pull-right img-circle'/>                  <p>Podrás escoger entre las siguientes respuestas:</p>                     <p id='example'>                     <button class='btn btn-large btn-danger'>:-P</button>                     <button class='btn btn-large btn-danger'>:-*</button>                     <button class='btn btn-large btn-danger'>:~(</button>                     <button class='btn btn-large btn-danger'>:-(</button>                     <button class='btn btn-large btn-danger'>;-)</button>                     </p>                     <p id='example2'>                     <button class='btn btn-large btn-danger'>:-O</button>                     <button class='btn btn-large btn-danger'>:-|</button>                     <button class='btn btn-large btn-danger'>:-@</button>                     <button class='btn btn-large btn-danger'>:-D</button>                     <button class='btn btn-large btn-danger'>:-)</button>                     </p>                     <p>Haz click en el emoticono que creas que es el correcto y se cargará el siguiente para ti. ¡Eso es todo!</p>",
+                        "i18n_step_2": "<p>Se te mostrarán 10 fotos, y si las haces todas de una vez, al final se te mostrará un resumen con tus aciertos y fallos:</p> <table class='table table-condensed'> <thead> <tr>                                <th>Emoticonos</th>                                 <th></th>                                 <th>Respuesta Correcta</th>                                 <th>Tu respuesta</th>                             </tr>                         </thead>                         <tbody>                             <tr class='success'>                                 <td><img class='img-polaroid' src='http://farm7.staticflickr.com/6109/6286728068_2f3c6912b8_q.jpg' style='height:50px'></td>                                 <td><i class='icon-thumbs-up'></i></td>                                <td>Grin :-D</td>                                 <td>Grin :-D</td>                            </tr>                             <tr class='error'>                                 <td><img class='img-polaroid' src='http://farm7.staticflickr.com/6109/6286728068_2f3c6912b8_q.jpg' style='height:50px'></td>      <td><i class='icon-thumbs-down'></i></th>                              <td>Grin :-D</td>                                 <td>Smile :-)</td>                             </tr>                             <tr class='info'>                                 <td><img class='img-polaroid' src='http://farm7.staticflickr.com/6109/6286728068_2f3c6912b8_q.jpg'  style='height:50px'></td>                                 <td><i class='icon-question-sign'></i></td>  <td>Grin :-D</td>      <td>No lo sé</td>                            </tr>                         </tbody>                     </table>",
+
+
                       },
                };
 
