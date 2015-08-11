@@ -40,13 +40,18 @@
 
 </style>
 <div class="row skeleton">
-    <div class="col-md-6 col-md-offset-3">
+    <div class="step0 col-md-6 col-md-offset-3">
+        <h1><span id="i18n_question_0">You are</span></h1>
+        <button class="btn btn-info btn-large btn-gender" value="male"><span id="i18n_male">Male</span></button>
+        <button class="btn btn-info btn-large btn-gender" value="female"><span id="i18n_female">Female</span></button>
+    </div>
+    <div class="step1 col-md-6 col-md-offset-3" style="display:none">
         <h1 class="hidden-xs"><span id="i18n_question">What emoticon is he/she making?</span></h1>
         <a id="photo-link" href="http://flickr.com/photos/thefacewemake">
             <img id="photo" class="img-circle img-responsive" src="http://img339.imageshack.us/img339/9017/loadingo.png" style="max-width=100%">
         </a>
     </div>
-    <div class="hidden-xs col-sm-12 col-md-6 col-md-offset-3 copyright">
+    <div class="step1 hidden-xs col-sm-12 col-md-6 col-md-offset-3 copyright">
         <p>
         <span id="i18n_photo">Photo</span> Copyright © <a href="http://www.flickr.com/photos/thefacewemake">The Face We Make</a> <span id="i18n_by">by</span> <a href="http://dxtr.com">Dexter Miranda</a>
         </p>
@@ -55,7 +60,7 @@
 
 <div class="row skeleton">
     <!-- Answer buttons -->
-    <div class="col-xs-12 col-md-6 col-md-offset-3 emoticons">
+    <div class="step1 col-xs-12 col-md-6 col-md-offset-3 emoticons">
         <button class="btn btn-danger btn-large btn-answer" value="Tongue :-P">:-P</button>
         <button class="btn btn-danger btn-large btn-answer" value="Kiss :-*">:-*</button>
         <button class="btn btn-danger btn-large btn-answer" value="Cry :~(">:~(</button>
@@ -69,7 +74,7 @@
     </div>
 </div>
 
-<div class="row skeleton">
+<div class="step1 row skeleton">
     <div class="col-md-12" style="text-align:center;">
         <h4><span id="left">0</span> <span id="i18n_claim">more emoticons to go!</span></h4>
         <h4><span id="i18n_your">Your answer is</span></h4>
@@ -125,8 +130,14 @@ var messages = {"en": {
                         "i18n_your": "Your answer is",
                         "i18n_wrong": "Wrong!",
                         "i18n_correct": "Correct!",
+                        "i18n_question_0": "You are",
+                        "i18n_male": "Male",
+                        "i18n_female": "Female",
                       },
                 "es": {
+                        "i18n_question_0": "Eres",
+                        "i18n_male": "Hombre",
+                        "i18n_female": "Mujer",
                         "i18n_question": "¿Qué emoticono está representando?",
                         "i18n_photo": "Foto",
                         "i18n_by": "por",
@@ -179,6 +190,8 @@ pybossa.taskLoaded(function(task, deferred) {
     if ( !$.isEmptyObject(task) ) {
         task.n_photos = task.info.photos.length;
         task.step = 0;
+        task.answer = {"gender": null,
+                       "answers": []}
         deferred.resolve(task);
     }
     else {
@@ -209,7 +222,17 @@ function add_table_answer(photo, answer) {
 
 pybossa.presentTask(function(task, deferred) {
     if ( !$.isEmptyObject(task) ) {
-        //loadUserProgress();
+        // First ask the user is gender
+        $(".step0").show();
+        $(".step1").hide();
+        $('.btn-gender').off('click').on('click', function(evt) {
+            var answer = $(evt.target).attr("value");
+            if ((answer == 'male') || (answer == 'female')) {
+                task.answer.gender = answer;
+                $(".step0").hide();
+                $(".step1").show();
+            }
+        });
         i18n_translate();
         $('#photo-link').html('');
         for(i=0;i<task.info.photos.length;i++) {
@@ -247,6 +270,10 @@ pybossa.presentTask(function(task, deferred) {
                 console.log(task.step);
                 console.log(answer);
                 console.log(get_answer(task.info.photos[task.step]));
+                var tmp = {"photo": task.info.photos[task.step],
+                           "correct_answer": get_answer(task.info.photos[task.step]),
+                           "user_answer": answer}
+                task.answer.answers.push(tmp);
                 if (task.step < task.n_photos) {
                     $("#photo_" + task.step).hide();
                     task.step += 1;
@@ -259,6 +286,7 @@ pybossa.presentTask(function(task, deferred) {
                         $("#finish").show();
                         $(".skeleton").hide();
                         console.log("Saving results");
+                        console.log(task.answer);
                     }
                 }
                 //pybossa.saveTask(task.id, answer).done(function() {
