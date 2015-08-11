@@ -177,60 +177,93 @@ function loadUserProgress() {
 
 pybossa.taskLoaded(function(task, deferred) {
     if ( !$.isEmptyObject(task) ) {
-        // load image from flickr
-        var img = $('<img />');
-        img.load(function() {
-            // continue as soon the image is loaded
-            deferred.resolve(task);
-        });
-        img.attr('src', task.info.url_b).css('max-width', "100%");
-        img.addClass('img-responsive img-circle col-xs-6 col-xs-offset-3 col-sm-4 col-sm-offset-4');
-        task.info.image = img;
+        task.n_photos = task.info.photos.length;
+        task.step = 0;
+        deferred.resolve(task);
     }
     else {
         deferred.resolve(task);
     }
 });
 
+function get_answer(photo) {
+    var tmp = photo.photo_info['photo']['description']['_content'].split('\n\n');
+    var taskAnswer = tmp[0];
+    return taskAnswer;
+}
+
+function add_table_answer(photo, answer) {
+    var photo_answer = get_answer(photo);
+    // Load image into results summary
+    var emoticon = "<td><img src='" + photo.url_b + "' style='height:100px'></td>";
+    var correctAnswer = "<td>" + photo_answer + "</td>";
+    if (photo_answer.toUpperCase().indexOf(answer.toUpperCase()) != -1) {
+        $("#correct").show();
+        $("#results").append('<tr class="success">' + emoticon + '<td><i class="icon-thumbs-up"></i></td>' + correctAnswer + '<td>' + answer + '</td></tr>');
+    }
+    else {
+        $("#wrong").show();
+        $("#results").append('<tr class="danger">' + emoticon + '<td><i class="icon-thumbs-down"></i></td>' + correctAnswer + '<td>' + answer + '</td></tr>');
+    }
+}
+
 pybossa.presentTask(function(task, deferred) {
     if ( !$.isEmptyObject(task) ) {
-        loadUserProgress();
+        //loadUserProgress();
         i18n_translate();
-        $('#photo-link').html('').append(task.info.image);
-        $("#question>h1").html(task.info.question);
+        $('#photo-link').html('');
+        for(i=0;i<task.info.photos.length;i++) {
+            var img = $('<img/>');
+            img.attr('id', 'photo_' + i);
+            console.log();
+            img.attr('src', task.info.photos[i].url_b).css('max-width', '100%');
+            img.addClass('img-responsive img-circle col-xs-6 col-xs-offset-3 col-sm-4 col-sm-offset-4');
+            img.css('display', 'none');
+            $('#photo-link').append(img);
+        }
         $('#task-id').html(task.id);
 
+        // Show the first photo of the batch
+        $("#photo_" + task.step).show();
         // Add feedback for user and results summary
         setTimeout(function() { $("#wrong").fadeOut() }, 1000);
         setTimeout(function() { $("#correct").fadeOut() }, 1000);
-        // Load image into results summary
-        emoticon = "<td><img src='" + task.info.url_b + "' class='img-polaroid' style='height:100px'></td>";
-        var tmp = task.info.photo_info['photo']['description']['_content'].split('\n\n');
-        taskAnswer = tmp[0];
-        correctAnswer = "<td>" + taskAnswer + "</td>";
+        var left = task.n_photos - task.step;
+        $("#left").text(left);
+
 
         $('.btn-answer').off('click').on('click', function(evt) {
             var answer = $(evt.target).attr("value");
             // Add result to results summary and feedback to the user
+            var photo_answer = get_answer(task.info.photos[task.step]);
             if (answer != 'dontknow') {
-                if (taskAnswer.toUpperCase().indexOf(answer.toUpperCase()) != -1) {
-                    $("#correct").show();
-                    $("#results").append('<tr class="success">' + emoticon + '<td><i class="icon-thumbs-up"></i></td>' + correctAnswer + '<td>' + answer + '</td></tr>');
-                }
-                else {
-                    $("#wrong").show();
-                    $("#results").append('<tr class="danger">' + emoticon + '<td><i class="icon-thumbs-down"></i></td>' + correctAnswer + '<td>' + answer + '</td></tr>');
-                }
+                add_table_answer(task.info.photos[task.step], answer);
             }
             else {
                 $("#results").append('<tr class="info">' + emoticon + '<td><i class="icon-question-sign"></i></td>' + correctAnswer + '<td>' + answer + '</td></tr>');
             }
 
             if (typeof answer != 'undefined') {
+                console.log(task.step);
                 console.log(answer);
-                pybossa.saveTask(task.id, answer).done(function() {
-                    deferred.resolve();
-                });
+                console.log(get_answer(task.info.photos[task.step]));
+                if (task.step < task.n_photos) {
+                    $("#photo_" + task.step).hide();
+                    task.step += 1;
+                    $("#photo_" + task.step).show();
+                    setTimeout(function() { $("#wrong").fadeOut() }, 1000);
+                    setTimeout(function() { $("#correct").fadeOut() }, 1000);
+                    var left = task.n_photos - task.step;
+                    $("#left").text(left);
+                    if (left == 0) {
+                        $("#finish").show();
+                        $(".skeleton").hide();
+                        console.log("Saving results");
+                    }
+                }
+                //pybossa.saveTask(task.id, answer).done(function() {
+                //    deferred.resolve();
+                //});
                 $("#loading").fadeIn(500);
             }
             else {
