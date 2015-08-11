@@ -87,7 +87,7 @@
 </div>
 
 <div class="col-md-2 pull-right ">
-    <a class="btn btn-primary btn-large tutorial" href="/app/thefacewemake2/tutorial"><i class="icon-question-sign"></i> Tutorial</a>
+    <a class="btn btn-primary btn-large tutorial" href="/project/thefacewemake2/tutorial"><i class="icon-question-sign"></i> Tutorial</a>
 </div>
 
 <div id="finish" class="row" style="display:none">
@@ -117,15 +117,16 @@
 </div>
 
 <script src="/static/js/pybossa/pybossa.js" type="text/javascript"></script>
-<script src="/static/js/throbber/throbber.js" type="text/javascript"></script>
 <script>
-var appname = 'thefacewemake';
+var appname = 'thefacewemake2';
 var taskAnswer = "";
 var correctAnswer = "";
 var emoticon = "";
+window.userLocale = "en";
 
 // Translations
-var messages = {"en": {
+var messages = {
+                "en": {
                         "i18n_question": "What emoticon is he/she making?",
                         "i18n_photo": "Photo",
                         "i18n_by": "by",
@@ -175,19 +176,28 @@ function getCookie(cname) {
 // Update userLocale with server side information
 $(document).ready(function(){
         if ($("#languageselector").length) {
-        userLocale = getCookie('language').toLowerCase();
+        var userLocale = getCookie('language').toLowerCase();
         console.log(userLocale);
+        if (userLocale == "en") {
+            console.log("English");
+            window.userLocale = "en";
+        }
+        if (userLocale == "es") {
+            console.log("Español");
+            window.userLocale = "es";
+        }
+        console.log(window.userLocale);
         }
         else {
-        userLocale = document.getElementById('PYBOSSA_USER_LOCALE').textContent.trim();
+        window.userLocale = document.getElementById('PYBOSSA_USER_LOCALE').textContent.trim();
         }
 });
 
 function i18n_translate() {
-    var ids = Object.keys(messages[userLocale])
+    var ids = Object.keys(messages[window.userLocale])
     for (i=0; i<ids.length; i++) {
         console.log("Translating: " + ids[i]);
-        document.getElementById(ids[i]).innerHTML = messages[userLocale][ids[i]];
+        document.getElementById(ids[i]).innerHTML = messages[window.userLocale][ids[i]];
     }
 }
 
