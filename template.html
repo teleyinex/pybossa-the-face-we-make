@@ -23,7 +23,11 @@
     .copyright {
         font-size: 10px;
     }
-    
+
+    #results td {
+      font-size: 18px;
+      line-height: 5em;
+    }
     .tutorial {
         position: fixed;
         top: 25%;
@@ -88,22 +92,21 @@
 
 <div id="finish" class="row" style="display:none">
     <div class="col-md-12">
-        <h1>Congratulations! You have participated in all available photos!</h1>
-        <h2>Check your results</h2>
-        <h2 style="display: none;">We will be adding more photos soon, so you can try it again!</h2>
+        <h1><span id="i18n_h1_end">Congratulations! You have participated in all available photos!</span></h1>
+        <h2><span id="i18n_check">Check your results</span></h2>
         <table class="table table-responsive table-condensed">
             <thead>
                 <tr>
                     <th width="150">
-                        Emoticons
+                        <span id="i18n_emoticons">Emoticons</span>
                     </th>
                     <th>
                     </th>
                     <th>
-                        Correct Answer
+                        <span id="i18n_correct_answer">Correct Answer</span>
                     </th>
                     <th>
-                        Your answer
+                        <span id="i18n_your_answer">Your answer</span>
                     </th>
                 </tr>
                 <tbody id="results">
@@ -133,6 +136,11 @@ var messages = {"en": {
                         "i18n_question_0": "You are",
                         "i18n_male": "Male",
                         "i18n_female": "Female",
+                        "i18n_correct_answer": "Correct Answer",
+                        "i18n_emoticons": "Emoticons",
+                        "i18n_h1_end": "Congratulations! You have participated in all available photos!",
+                        "i18n_check": "Check your results",
+                        "i18n_your_answer": "Your answer",
                       },
                 "es": {
                         "i18n_question_0": "Eres",
@@ -145,6 +153,11 @@ var messages = {"en": {
                         "i18n_your": "Tu respuesta es",
                         "i18n_wrong": "¡Equivocada!",
                         "i18n_correct": "¡Correcta!",
+                        "i18n_correct_answer": "Respuesta correcta",
+                        "i18n_emoticons": "Emoticonos",
+                        "i18n_h1_end": "¡Enhorabuena! Ya has clasificado todos los emoticonos.",
+                        "i18n_check": "Comprueba tus resultados",
+                        "i18n_your_answer": "Tu respuesta",
                       },
                };
 
@@ -212,11 +225,11 @@ function add_table_answer(photo, answer) {
     var correctAnswer = "<td>" + photo_answer + "</td>";
     if (photo_answer.toUpperCase().indexOf(answer.toUpperCase()) != -1) {
         $("#correct").show();
-        $("#results").append('<tr class="success">' + emoticon + '<td><i class="icon-thumbs-up"></i></td>' + correctAnswer + '<td>' + answer + '</td></tr>');
+        $("#results").append('<tr class="success">' + emoticon + '<td><i class="fa fa-thumbs-up"></i></td>' + correctAnswer + '<td>' + answer + '</td></tr>');
     }
     else {
         $("#wrong").show();
-        $("#results").append('<tr class="danger">' + emoticon + '<td><i class="icon-thumbs-down"></i></td>' + correctAnswer + '<td>' + answer + '</td></tr>');
+        $("#results").append('<tr class="danger">' + emoticon + '<td><i class="fa fa-thumbs-down"></i></td>' + correctAnswer + '<td>' + answer + '</td></tr>');
     }
 }
 
