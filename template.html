@@ -46,8 +46,8 @@
 <div class="row skeleton">
     <div class="step0 col-md-6 col-md-offset-3">
         <h1><span id="i18n_question_0">You are</span></h1>
-        <button class="btn btn-info btn-large btn-gender" value="male"><span id="i18n_male">Male</span></button>
-        <button class="btn btn-info btn-large btn-gender" value="female"><span id="i18n_female">Female</span></button>
+        <button id="i18n_male" class="btn btn-info btn-lg btn-gender" value="male"></button>
+        <button id="i18n_female" class="btn btn-info btn-lg btn-gender" value="female"></button>
     </div>
     <div class="step1 col-md-6 col-md-offset-3" style="display:none">
         <h1 class="hidden-xs"><span id="i18n_question">What emoticon is he/she making?</span></h1>
@@ -118,7 +118,7 @@
 
 <script src="/static/js/pybossa/pybossa.js" type="text/javascript"></script>
 <script>
-var appname = 'thefacewemake2';
+var appname = 'thefacewemake';
 var taskAnswer = "";
 var correctAnswer = "";
 var emoticon = "";
@@ -248,7 +248,7 @@ pybossa.presentTask(function(task, deferred) {
         // First ask the user is gender
         $(".step0").show();
         $(".step1").hide();
-        $('.btn-gender').off('click').on('click', function(evt) {
+        $('.btn-gender').off('click tap').on('click tap', function(evt) {
             var answer = $(evt.target).attr("value");
             if ((answer == 'male') || (answer == 'female')) {
                 task.answer.gender = answer;
