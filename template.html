@@ -28,6 +28,22 @@
       font-size: 18px;
       line-height: 5em;
     }
+
+    #results td img {
+        max-height: 100px;
+    }
+
+    @media (max-width:360px) {
+        #results td {
+          font-size: 12px;
+          line-height: 4em;
+    }
+
+        #results td img {
+            max-height: 50px;
+        }
+
+    }
     .tutorial {
         position: fixed;
         top: 25%;
@@ -42,12 +58,16 @@
         }
     }
 
+    .btn-gender > i {
+        font-size: 1.5em;
+    }
+
 </style>
 <div class="row skeleton">
     <div class="step0 col-md-6 col-md-offset-3">
         <h1><span id="i18n_question_0">You are</span></h1>
-        <button id="i18n_male" class="btn btn-info btn-lg btn-gender" value="male"></button>
-        <button id="i18n_female" class="btn btn-info btn-lg btn-gender" value="female"></button>
+        <button class="btn btn-info btn-lg btn-gender" value="male"><i class="fa fa-male"></i></button>
+        <button class="btn btn-info btn-lg btn-gender" value="female"><i class="fa fa-female"></i></button>
     </div>
     <div class="step1 col-md-6 col-md-offset-3" style="display:none">
         <h1 class="hidden-xs"><span id="i18n_question">What emoticon is he/she making?</span></h1>
@@ -97,10 +117,8 @@
         <table class="table table-responsive table-condensed">
             <thead>
                 <tr>
-                    <th width="150">
-                        <span id="i18n_emoticons">Emoticons</span>
-                    </th>
                     <th>
+                        <span id="i18n_emoticons">Emoticons</span>
                     </th>
                     <th>
                         <span id="i18n_correct_answer">Correct Answer</span>
@@ -135,8 +153,6 @@ var messages = {
                         "i18n_wrong": "Wrong!",
                         "i18n_correct": "Correct!",
                         "i18n_question_0": "You are",
-                        "i18n_male": "Male",
-                        "i18n_female": "Female",
                         "i18n_correct_answer": "Correct Answer",
                         "i18n_emoticons": "Emoticons",
                         "i18n_h1_end": "Congratulations! You have participated in all available photos!",
@@ -145,8 +161,6 @@ var messages = {
                       },
                 "es": {
                         "i18n_question_0": "Eres",
-                        "i18n_male": "Hombre",
-                        "i18n_female": "Mujer",
                         "i18n_question": "¿Qué emoticono está representando?",
                         "i18n_photo": "Foto",
                         "i18n_by": "por",
@@ -235,11 +249,11 @@ function add_table_answer(photo, answer) {
     var correctAnswer = "<td>" + photo_answer + "</td>";
     if (photo_answer.toUpperCase().indexOf(answer.toUpperCase()) != -1) {
         $("#correct").show();
-        $("#results").append('<tr class="success">' + emoticon + '<td><i class="fa fa-thumbs-up"></i></td>' + correctAnswer + '<td>' + answer + '</td></tr>');
+        $("#results").append('<tr class="success">' + emoticon + correctAnswer + '<td>' + answer + '</td></tr>');
     }
     else {
         $("#wrong").show();
-        $("#results").append('<tr class="danger">' + emoticon + '<td><i class="fa fa-thumbs-down"></i></td>' + correctAnswer + '<td>' + answer + '</td></tr>');
+        $("#results").append('<tr class="danger">' + emoticon + correctAnswer + '<td>' + answer + '</td></tr>');
     }
 }
 
