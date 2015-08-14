@@ -13,10 +13,10 @@ def create_tr(i):
     tr = deepcopy(task_run)
     tr['id'] = int(tr['id']) + i
     tr['user_id'] = int(tr['id']) + i
-    tr['info']['gender'] = choice(gender)[0]
+    tr['info']['gender'] = choice(gender)
     for a in tr['info']['answers']:
         if random() > 0.5:
-            a['user_answer'] = choice(answers)[0]
+            a['user_answer'] = choice(answers)
         else:
             a['user_answer'] = a['correct_answer']
     return tr

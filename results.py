@@ -51,10 +51,14 @@ print tmp.loc['photo_id'].value_counts()
 print "##############"
 print "CORRECT ANSWER"
 print "##############"
+gender_correct_male = None
+gender_correct_female = None
 for photo in task.info['photos']:
     key = photo['photo_info']['photo']['id']
     if key == photo_id:
         value = photo['photo_info']['photo']['description']['_content'].split('\n\n')[0]
+        gender_correct_male = ('male', value, value)
+        gender_correct_female = ('female', value, value)
         print "Correct answer from task is: %s" % value
 print "Correct answer from task_run is:"
 print tmp.loc['correct_answer'].describe()
@@ -65,4 +69,8 @@ print "#############"
 print tmp.loc['user_answer'].describe()
 print tmp.loc['user_answer'].value_counts()
 #
-
+g = tmp.T.groupby(['gender', 'user_answer', 'correct_answer'])
+print "GENDER MALE"
+print g.get_group(gender_correct_male).count()
+print "GENDER FEMALE"
+print g.get_group(gender_correct_female).count()
