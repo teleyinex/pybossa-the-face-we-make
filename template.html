@@ -1,3 +1,20 @@
+    <script>
+      window.fbAsyncInit = function() {
+        FB.init({
+          appId      : '386881971378504',
+          xfbml      : true,
+          version    : 'v2.4'
+        });
+      };
+
+      (function(d, s, id){
+         var js, fjs = d.getElementsByTagName(s)[0];
+         if (d.getElementById(id)) {return;}
+         js = d.createElement(s); js.id = id;
+         js.src = "//connect.facebook.net/en_US/sdk.js";
+         fjs.parentNode.insertBefore(js, fjs);
+       }(document, 'script', 'facebook-jssdk'));
+    </script>
 <style type="text/css">
     /* table, td {
         text-transform: capitalize;
@@ -7,6 +24,37 @@
     td> i {
         font-size: 48px;
     }*/
+    .btn-twitter, .btn-facebook {
+        width:50px;
+        height:50px;
+        font-size: 24px;
+    }
+    .step1 {
+        display: none;
+    }
+    .btn-twitter {
+        border: 2px solid #73C0EC;
+        background-color: white;
+        color: #73C0EC;
+    }
+
+    .btn-twitter:hover{
+        color: white;
+        background-color: #73C0EC;
+    }
+
+    .btn-facebook {
+        border: 2px solid #48649F;
+        background-color: white;
+        color: #48649F;
+    }
+
+    .btn-facebook:hover{
+        color: white;
+        background-color: #48649F;
+    }
+
+
     .skeleton {
         margin-top: 5px;
         text-align: center;
@@ -107,7 +155,7 @@
 </div>
 
 <div class="col-md-2 pull-right ">
-    <a class="btn btn-primary btn-large tutorial" href="/project/thefacewemake2/tutorial"><i class="icon-question-sign"></i> Tutorial</a>
+    <a class="btn btn-primary btn-large tutorial" href="/project/thefacewemake/tutorial"><i class="icon-question-sign"></i> Tutorial</a>
 </div>
 
 <div id="finish" class="row" style="display:none">
@@ -132,6 +180,11 @@
             </thead>
         </table>
     </div>
+    <div class="ssnn col-md-12">
+        <h2 id="i18n_share">Tell it your friends!</h2>
+        <a id="shareTwitter" target="_blank" class="btn btn-twitter" href=''><i class="fa fa-twitter"></i></a>
+        <a id="shareFacebook" class="btn btn-facebook" href=''><i class="fa fa-facebook"></i></a>
+    </div>
 </div>
 
 <script src="/static/js/pybossa/pybossa.js" type="text/javascript"></script>
@@ -145,6 +198,7 @@ window.userLocale = "en";
 // Translations
 var messages = {
                 "en": {
+                        "i18n_share": "Tell it your friends!",
                         "i18n_question": "What emoticon is he/she making?",
                         "i18n_photo": "Photo",
                         "i18n_by": "by",
@@ -160,6 +214,7 @@ var messages = {
                         "i18n_your_answer": "Your answer",
                       },
                 "es": {
+                        "i18n_share": "¡Díselo a tus amigos!",
                         "i18n_question_0": "Eres",
                         "i18n_question": "¿Qué emoticono está representando?",
                         "i18n_photo": "Foto",
@@ -227,6 +282,7 @@ pybossa.taskLoaded(function(task, deferred) {
     if ( !$.isEmptyObject(task) ) {
         task.n_photos = task.info.photos.length;
         task.step = 0;
+        task.correct = 0;
         task.answer = {"gender": null,
                        "answers": []}
         deferred.resolve(task);
@@ -242,12 +298,13 @@ function get_answer(photo) {
     return taskAnswer;
 }
 
-function add_table_answer(photo, answer) {
+function add_table_answer(task, photo, answer) {
     var photo_answer = get_answer(photo);
     // Load image into results summary
     var emoticon = "<td><img src='" + photo.url_b + "' style='height:100px'></td>";
     var correctAnswer = "<td>" + photo_answer + "</td>";
     if (photo_answer.toUpperCase().indexOf(answer.toUpperCase()) != -1) {
+        task.correct += 1;
         $("#correct").show();
         $("#results").append('<tr class="success">' + emoticon + correctAnswer + '<td>' + answer + '</td></tr>');
     }
@@ -263,7 +320,7 @@ pybossa.presentTask(function(task, deferred) {
         $(".step0").show();
         $(".step1").hide();
         $('.btn-gender').off('click tap').on('click tap', function(evt) {
-            var answer = $(evt.target).attr("value");
+            var answer = $(this).attr("value");
             if ((answer == 'male') || (answer == 'female')) {
                 task.answer.gender = answer;
                 $(".step0").hide();
@@ -293,11 +350,11 @@ pybossa.presentTask(function(task, deferred) {
 
 
         $('.btn-answer').off('click').on('click', function(evt) {
-            var answer = $(evt.target).attr("value");
+            var answer = $(this).attr("value");
             // Add result to results summary and feedback to the user
             var photo_answer = get_answer(task.info.photos[task.step]);
             if (answer != 'dontknow') {
-                add_table_answer(task.info.photos[task.step], answer);
+                add_table_answer(task, task.info.photos[task.step], answer);
             }
             else {
                 $("#results").append('<tr class="info">' + emoticon + '<td><i class="icon-question-sign"></i></td>' + correctAnswer + '<td>' + answer + '</td></tr>');
@@ -320,15 +377,41 @@ pybossa.presentTask(function(task, deferred) {
                     var left = task.n_photos - task.step;
                     $("#left").text(left);
                     if (left == 0) {
-                        $("#finish").show();
-                        $(".skeleton").hide();
                         console.log("Saving results");
                         console.log(task.answer);
+                        if (window.userLocale == 'en') {
+                        var ssnn_msg = "I've guessed " + task.correct  + " out of " + task.n_photos;
+                        ssnn_msg += " emoticons. How many can you guess? Give it a try "
+                        }
+                        else {
+                        var ssnn_msg = "He adivinado " + task.correct  + " de " + task.n_photos;
+                        ssnn_msg += " emoticonos. Cuantos serías capaz tú? Inténtalo "
+                        }
+
+                        var href_url='https://twitter.com/intent/tweet?text=' + encodeURIComponent(ssnn_msg);
+                        href_url +='&url=http://crowdcrafting.org/project/thefacewemake/';
+                        href_url +='&via=crowdcrafting';
+                        href_url +='&hashtags=game, emoticons';
+
+                        $("#shareTwitter").attr("href", href_url);
+                        $("#shareFacebook").off('click tap').on('click tap', function(evt){
+                            FB.ui({
+                              method: 'feed',
+                              link: 'http://crowdcrafting.org/project/thefacewemake/',
+                              picture: 'http://55eba51f2afde86816ad-9e09458ceeaf408c2c4f0e409bbc748e.r30.cf2.rackcdn.com/project_3225_thumbnail_1438946132.png',
+                              caption: 'The Face We Make',
+                              description: ssnn_msg,
+                            }, function(response){});                               
+                        });
+
+                        pybossa.saveTask(task.id, task.answer).done(function(){
+                                $("#finish").show();
+                                $(".skeleton").hide();
+                                $deferred.resolve();
+                                });
+
                     }
                 }
-                //pybossa.saveTask(task.id, answer).done(function() {
-                //    deferred.resolve();
-                //});
                 $("#loading").fadeIn(500);
             }
             else {
@@ -341,6 +424,7 @@ pybossa.presentTask(function(task, deferred) {
         $(".skeleton").hide();
         $("#loading").hide();
         $("#finish").fadeIn(500);
+        $(".ssnn").hide();
         if (!taskAnswer) {
             $("h2").toggle();
             $("table").toggle();
