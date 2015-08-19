@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
     <script>
       window.fbAsyncInit = function() {
         FB.init({
@@ -24,7 +25,7 @@
     td> i {
         font-size: 48px;
     }*/
-    .btn-twitter, .btn-facebook {
+    .btn-twitter, .btn-facebook, .btn-whatsapp {
         width:50px;
         height:50px;
         font-size: 24px;
@@ -32,6 +33,19 @@
     .step1 {
         display: none;
     }
+
+    .btn-whatsapp{
+        border: 2px solid #4DEC67;
+        background-color: white;
+        color: #4DEC67;
+    }
+
+    .btn-whatsapp:hover{
+        color: white;
+        background-color: #4DEC67;
+    }
+
+
     .btn-twitter {
         border: 2px solid #73C0EC;
         background-color: white;
@@ -96,6 +110,8 @@
         position: fixed;
         top: 25%;
         right: -25px;
+        -webkit-transform: rotate(-90deg);
+        -ms-transform: rotate(-90deg);
         transform: rotate(-90deg);
         z-index: 99999;
         }
@@ -114,6 +130,7 @@
 <div class="row skeleton">
     <div class="step0 col-md-6 col-md-offset-3">
         <h1><span id="i18n_question_0">You are</span></h1>
+
         <button class="btn btn-info btn-lg btn-gender" value="male"><i class="fa fa-male"></i></button>
         <button class="btn btn-info btn-lg btn-gender" value="female"><i class="fa fa-female"></i></button>
     </div>
@@ -182,6 +199,7 @@
     </div>
     <div class="ssnn col-md-12">
         <h2 id="i18n_share">Tell it your friends!</h2>
+        <a id="shareWhatsapp" target="_blank" class="btn btn-whatsapp" data-action="share/whatsapp/share" href=''><i class="fa fa-whatsapp"></i></a>
         <a id="shareTwitter" target="_blank" class="btn btn-twitter" href=''><i class="fa fa-twitter"></i></a>
         <a id="shareFacebook" class="btn btn-facebook" href=''><i class="fa fa-facebook"></i></a>
     </div>
@@ -403,6 +421,9 @@ pybossa.presentTask(function(task, deferred) {
                               description: ssnn_msg,
                             }, function(response){});                               
                         });
+
+                        var whatsapp = 'whatsapp://send?text=' + ssnn_msg + ' ' + 'http://crowdcrafting.org/project/thefacewemake/';
+                        $("#shareWhatsapp").attr('href', whatsapp);
 
                         pybossa.saveTask(task.id, task.answer).done(function(){
                                 $("#finish").show();
